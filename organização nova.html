@@ -1,0 +1,2613 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Túneis Gelados | Grendene</title>
+    <style>
+        :root {
+            --grendene-blue: #0056b3;
+            --grendene-dark-blue: #003d82;
+            --grendene-green: #28a745;
+            --grendene-red: #dc3545;
+            --grendene-yellow: #ffc107;
+            --grendene-orange: #fd7e14;
+        }
+        
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 100%;
+            padding: 15px;
+        }
+        
+        .login-container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .logo {
+            max-width: 200px;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--grendene-blue);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.1);
+        }
+        
+        button {
+            background-color: var(--grendene-blue);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            width: 100%;
+            margin-top: 10px;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background-color: var(--grendene-dark-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .btn-secondary {
+            background-color: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+        
+        .btn-danger {
+            background-color: var(--grendene-red);
+        }
+        
+        .btn-success {
+            background-color: var(--grendene-green);
+        }
+        
+        .btn-warning {
+            background-color: var(--grendene-yellow);
+            color: #000;
+        }
+        
+        .btn-info {
+            background-color: #17a2b8;
+            color: white;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, var(--grendene-blue), var(--grendene-dark-blue));
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        
+        .user-info {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: white;
+            color: var(--grendene-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .dashboard-alerts {
+            padding: 15px;
+            margin-bottom: 20px;
+            background: #fff3cd;
+            border-left: 5px solid var(--grendene-yellow);
+            border-radius: 4px;
+        }
+        
+        .menu {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .menu button {
+            height: 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            text-align: center;
+            border-radius: 8px;
+            background-color: white;
+            color: var(--grendene-blue);
+            border: 1px solid #ddd;
+            transition: all 0.3s;
+        }
+        
+        .menu button:hover {
+            background-color: var(--grendene-blue);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .menu button i {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        
+        .lists-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        
+        .list {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .list h3 {
+            margin-top: 0;
+            color: var(--grendene-blue);
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+        
+        .list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+            transition: background-color 0.2s;
+        }
+        
+        .list-item:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .list-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .list-actions button {
+            width: auto;
+            padding: 8px 12px;
+            font-size: 14px;
+            margin-top: 0;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 8px;
+        }
+        
+        .status-reserva {
+            background-color: var(--grendene-yellow);
+            color: #000;
+        }
+        
+        .status-manutencao {
+            background-color: var(--grendene-red);
+            color: #fff;
+        }
+        
+        .status-preventiva {
+            background-color: #17a2b8;
+            color: #fff;
+        }
+        
+        .status-liberado {
+            background-color: var(--grendene-green);
+            color: #fff;
+        }
+        
+        .tunel-designado {
+            font-size: 13px;
+            color: #666;
+            margin-top: 4px;
+        }
+        
+        .historico-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 10px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .historico-data {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 5px;
+        }
+        
+        .historico-usuario {
+            font-weight: bold;
+            color: var(--grendene-blue);
+        }
+        
+        .historico-detalhes {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .action-form {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .tunel-substituto-container, .proxima-preventiva-container {
+            display: none;
+            margin-top: 15px;
+            animation: fadeIn 0.3s;
+        }
+        
+        .alert-message {
+            color: var(--grendene-red);
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        
+        .maquina-info {
+            background-color: #f0f4f8;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .tuneis-associados {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .tunel-associado {
+            background-color: #e2e6ea;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        @media (min-width: 768px) {
+            .lists-container {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        .page {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        .mapa-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .maquina-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .maquina-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .tuneis-disponiveis {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .filtros-historico {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .filtro-mes, .filtro-usuario {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .notificacao {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--grendene-yellow);
+            color: #000;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            animation: slideIn 0.3s;
+        }
+        
+        .notificacao button {
+            width: auto;
+            margin-left: 15px;
+            padding: 5px 10px;
+            background: transparent;
+            color: #000;
+            border: 1px solid rgba(0,0,0,0.2);
+        }
+        
+        .notificacao button:hover {
+            background: rgba(0,0,0,0.1);
+        }
+        
+        /* Cores para status de preventiva */
+        .preventiva-hoje {
+            background-color: var(--grendene-yellow);
+        }
+        
+        .preventiva-5dias {
+            background-color: var(--grendene-orange);
+            color: white;
+        }
+        
+        .preventiva-10dias {
+            background-color: var(--grendene-red);
+            color: white;
+        }
+        
+        .preventiva-30dias {
+            background-color: #8b0000;
+            color: white;
+        }
+        
+        .preventiva-ok {
+            background-color: var(--grendene-green);
+            color: white;
+        }
+        
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--grendene-blue);
+            margin: 10px 0;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        /* Animações */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideIn {
+            from { 
+                opacity: 0;
+                transform: translateX(100%);
+            }
+            to { 
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        /* Ícones (usando Unicode como placeholder) */
+        .icon {
+            font-style: normal;
+            margin-right: 5px;
+        }
+    </style>
+    <!-- Adicionando Font Awesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Notificação -->
+    <div id="notificacao" class="notificacao">
+        <span id="notificacaoTexto"></span>
+        <button onclick="fecharNotificacao()">X</button>
+    </div>
+
+    <!-- Página de Login -->
+    <div id="loginPage" class="page active">
+        <div class="login-container">
+            <!-- Logo Grendene (placeholder) -->
+            <div class="logo" style="color: var(--grendene-blue); font-size: 24px; font-weight: bold; margin: 0 auto;">
+                GRENDENE
+            </div>
+            <h1 style="text-align: center; margin-bottom: 20px; color: var(--grendene-blue);">Sistema de Túneis Gelados</h1>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username"><i class="fas fa-user icon"></i>Usuário:</label>
+                    <input type="text" id="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password"><i class="fas fa-lock icon"></i>Senha:</label>
+                    <input type="password" id="password" required>
+                </div>
+                <button type="submit"><i class="fas fa-sign-in-alt icon"></i>Entrar</button>
+                <button type="button" id="primeiroAcesso" class="btn-secondary"><i class="fas fa-user-plus icon"></i>Primeiro Acesso</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Página Dashboard -->
+    <div id="dashboardPage" class="page">
+        <div class="header">
+            <h1><i class="fas fa-tachometer-alt icon"></i>Dashboard Analítico</h1>
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">AD</div>
+                <button id="logout" class="btn-secondary" style="width: auto; margin-top: 0; padding: 8px 15px;">
+                    <i class="fas fa-sign-out-alt icon"></i>Sair
+                </button>
+            </div>
+        </div>
+        
+        <div class="container">
+            <div class="dashboard-alerts" id="alertContainer"></div>
+            
+            <!-- Estatísticas rápidas -->
+            <div class="stats-container" id="statsContainer"></div>
+            
+            <div class="menu">
+                <button id="btnCadastro">
+                    <i class="fas fa-plus-circle"></i>
+                    Cadastros
+                </button>
+                <button id="btnTuneis">
+                    <i class="fas fa-snowflake"></i>
+                    Túneis
+                </button>
+                <button id="btnMaquinas">
+                    <i class="fas fa-cogs"></i>
+                    Máquinas
+                </button>
+                <button id="btnServicos">
+                    <i class="fas fa-tools"></i>
+                    Serviços
+                </button>
+                <button id="btnTuneisReserva">
+                    <i class="fas fa-clock"></i>
+                    Em Reserva
+                </button>
+                <button id="btnTuneisManutencao">
+                    <i class="fas fa-wrench"></i>
+                    Em Manutenção
+                </button>
+                <button id="btnTuneisPreventiva">
+                    <i class="fas fa-calendar-check"></i>
+                    Em Preventiva
+                </button>
+                <button id="btnHistorico">
+                    <i class="fas fa-history"></i>
+                    Histórico
+                </button>
+                <button id="btnMapeamento" class="btn-info">
+                    <i class="fas fa-map-marked-alt"></i>
+                    Mapeamento
+                </button>
+            </div>
+            
+            <div id="listsContainer" style="display: none;">
+                <div class="lists-container">
+                    <div class="list" id="tuneisList">
+                        <h3><i class="fas fa-snowflake icon"></i>Túneis Cadastrados</h3>
+                        <div id="tuneisUl"></div>
+                    </div>
+                    <div class="list" id="maquinasList">
+                        <h3><i class="fas fa-cogs icon"></i>Máquinas EVA Cadastradas</h3>
+                        <div id="maquinasUl"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Página de Cadastro -->
+    <div id="cadastroPage" class="page">
+        <div class="header">
+            <h1><i class="fas fa-plus-circle icon"></i>Cadastro de Equipamentos</h1>
+            <button id="voltarDashboard1" class="btn-secondary" style="width: auto; margin-top: 10px;">
+                <i class="fas fa-arrow-left icon"></i>Voltar
+            </button>
+        </div>
+        
+        <div class="container">
+            <div class="menu" style="margin-bottom: 20px; grid-template-columns: 1fr 1fr;">
+                <button id="btnCadastrarTunel">
+                    <i class="fas fa-snowflake icon"></i>Cadastrar Túnel
+                </button>
+                <button id="btnCadastrarMaquina">
+                    <i class="fas fa-cogs icon"></i>Cadastrar Máquina
+                </button>
+            </div>
+            
+            <div id="cadastroForm" style="display: none;">
+                <h2 id="formTitle" style="text-align: center;"></h2>
+                <form id="equipamentoForm">
+                    <input type="hidden" id="tipoEquipamento">
+                    <div class="form-group">
+                        <label for="nomeEquipamento"><i class="fas fa-tag icon"></i>Nome do Equipamento:</label>
+                        <input type="text" id="nomeEquipamento" required>
+                    </div>
+                    <div class="form-group" id="preventivaInicialContainer" style="display: none;">
+                        <label for="dataPreventivaInicial"><i class="fas fa-calendar-day icon"></i>Data da Primeira Preventiva:</label>
+                        <input type="date" id="dataPreventivaInicial">
+                    </div>
+                    <div class="form-group" id="preventivaMaquinaContainer" style="display: none;">
+                        <label for="dataPreventivaMaquina"><i class="fas fa-calendar-day icon"></i>Data da Última Preventiva:</label>
+                        <input type="date" id="dataPreventivaMaquina">
+                    </div>
+                    <button type="submit"><i class="fas fa-save icon"></i>Salvar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Página de Serviços -->
+    <div id="servicosPage" class="page">
+        <div class="header">
+            <h1><i class="fas fa-tools icon"></i>Registro de Serviços</h1>
+            <button id="voltarDashboard2" class="btn-secondary" style="width: auto; margin-top: 10px;">
+                <i class="fas fa-arrow-left icon"></i>Voltar
+            </button>
+        </div>
+        
+        <div class="container">
+            <form id="servicoForm">
+                <div class="form-group">
+                    <label><i class="fas fa-cogs icon"></i>Máquina de EVA:</label>
+                    <select id="servicoMaquina" required onchange="carregarTuneisDaMaquina()">
+                        <option value="">Selecione a máquina...</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label><i class="fas fa-snowflake icon"></i>Túnel:</label>
+                    <select id="servicoTunel" required>
+                        <option value="">Selecione o túnel...</option>
+                    </select>
+                    <div id="tunelAlerta" class="alert-message"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="acao"><i class="fas fa-tasks icon"></i>Ação:</label>
+                    <select id="acao" required onchange="atualizarCamposServico()">
+                        <option value="">Selecione...</option>
+                        <option value="preventiva">Preventiva</option>
+                        <option value="manutencao">Manutenção</option>
+                        <option value="reserva">Reserva</option>
+                        <option value="transferencia">Transferência</option>
+                    </select>
+                </div>
+                
+                <div class="form-group" id="detalhesContainer" style="display: none;">
+                    <label for="detalhes"><i class="fas fa-align-left icon"></i>Detalhes:</label>
+                    <textarea id="detalhes" rows="4" required></textarea>
+                </div>
+                
+                <div class="form-group" id="proximaPreventivaContainer" style="display: none;">
+                    <label for="dataProximaPreventiva"><i class="fas fa-calendar-check icon"></i>Data Próxima Preventiva:</label>
+                    <input type="date" id="dataProximaPreventiva" required>
+                </div>
+                
+                <div class="form-group" id="tunelSubstitutoContainer" style="display: none;">
+                    <label for="tunelSubstituto"><i class="fas fa-exchange-alt icon"></i>Túnel Substituto:</label>
+                    <select id="tunelSubstituto">
+                        <option value="">Selecione o túnel substituto...</option>
+                    </select>
+                    <div id="substitutoAlerta" class="alert-message"></div>
+                </div>
+                
+                <button type="submit"><i class="fas fa-check-circle icon"></i>Registrar Serviço</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Página de Túneis em Reserva -->
+    <div id="tuneisReservaPage" class="page">
+        <div class="header">
+            <h1><i class="fas fa-clock icon"></i>Túneis em Reserva</h1>
+            <button id="voltarDashboard3" class="btn-secondary" style="width: auto; margin-top: 10px;">
+                <i class="fas fa-arrow-left icon"></i>Voltar
+            </button>
+        </div>
+        
+        <div class="container">
+            <div class="list">
+                <h3><i class="fas fa-clock icon"></i>Túneis Marcados como Reserva</h3>
+                <div id="tuneisReservaUl"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Página de Túneis em Manutenção -->
+    <div id="tuneisManutencaoPage" class="page">
+        <div class="header">
+            <h1><i class="fas fa-wrench icon"></i>Túneis em Manutenção</h1>
+            <button id="voltarDashboard4" class="btn-secondary" style="width: auto; margin-top: 10px;">
+                <i class="fas fa-arrow-left icon"></i>Voltar
+            </button>
+        </div>
+        
+        <div class="container">
+            <div class="list">
+                <h3><i class="fas fa-wrench icon"></i>Túneis em Manutenção</h3>
+                <div id="tuneisManutencaoUl"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Página de Túneis em Preventiva -->
+    <div id="tuneisPreventivaPage" class="page">
+        <div class="header">
+            <h1><i class="fas fa-calendar-check icon"></i>Túneis em Preventiva</h1>
+            <button id="voltarDashboard5" class="btn-secondary" style="width: auto; margin-top: 10px;">
+                <i class="fas fa-arrow-left icon"></i>Voltar
+            </button>
+        </div>
+        
+        <div class="container">
+            <div class="list">
+                <h3><i class="fas fa-calendar-check icon"></i>Túneis em Preventiva</h3>
+                <div id="tuneisPreventivaUl"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Página de Histórico -->
+    <div id="historicoPage" class="page">
+        <div class="header">
+            <h1><i class="fas fa-history icon"></i>Histórico de Serviços</h1>
+            <button id="voltarDashboard6" class="btn-secondary" style="width: auto; margin-top: 10px;">
+                <i class="fas fa-arrow-left icon"></i>Voltar
+            </button>
+        </div>
+        
+        <div class="container">
+            <div class="filtros-historico">
+                <div class="form-group filtro-mes">
+                    <label for="filtroMes"><i class="fas fa-filter icon"></i>Filtrar por Mês:</label>
+                    <select id="filtroMes" onchange="filtrarHistorico()">
+                        <option value="0">Todos os meses</option>
+                        <option value="1">Janeiro</option>
+                        <option value="2">Fevereiro</option>
+                        <option value="3">Março</option>
+                        <option value="4">Abril</option>
+                        <option value="5">Maio</option>
+                        <option value="6">Junho</option>
+                        <option value="7">Julho</option>
+                        <option value="8">Agosto</option>
+                        <option value="9">Setembro</option>
+                        <option value="10">Outubro</option>
+                        <option value="11">Novembro</option>
+                        <option value="12">Dezembro</option>
+                    </select>
+                </div>
+                
+                <div class="form-group filtro-usuario">
+                    <label for="filtroUsuario"><i class="fas fa-search icon"></i>Pesquisar por Usuário:</label>
+                    <input type="text" id="filtroUsuario" placeholder="Digite o nome do usuário" oninput="filtrarHistorico()">
+                </div>
+            </div>
+            
+            <div class="list">
+                <h3><i class="fas fa-list icon"></i>Registros de Serviços</h3>
+                <div id="historicoList"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Página de Mapeamento -->
+    <div id="mapeamentoPage" class="page">
+        <div class="header">
+            <h1><i class="fas fa-map-marked-alt icon"></i>Mapeamento de Máquinas e Túneis</h1>
+            <button id="voltarDashboard7" class="btn-secondary" style="width: auto; margin-top: 10px;">
+                <i class="fas fa-arrow-left icon"></i>Voltar
+            </button>
+        </div>
+        
+        <div class="container">
+            <div class="mapa-container" id="mapaMaquinasTuneis"></div>
+        </div>
+    </div>
+    <script>
+        // Variáveis globais
+        let usuarioLogado = null;
+        let tuneis = [];
+        let maquinas = [];
+        let historico = [];
+        let usuarios = [
+            { id: 1, nome: "Admin", username: "admin", password: "admin123", avatar: "AD" },
+            { id: 2, nome: "Operador", username: "operador", password: "oper123", avatar: "OP" }
+        ];
+    
+        // Dados iniciais para demonstração
+        function inicializarDados() {
+            tuneis = [
+                { id: 1, nome: "Túnel 01", status: "liberado", maquinaAssociada: null, proximaPreventiva: null },
+                { id: 2, nome: "Túnel 02", status: "manutencao", maquinaAssociada: 1, proximaPreventiva: null },
+                { id: 3, nome: "Túnel 03", status: "reserva", maquinaAssociada: null, proximaPreventiva: null },
+                { id: 4, nome: "Túnel 04", status: "preventiva", maquinaAssociada: 2, proximaPreventiva: "2023-12-15" }
+            ];
+    
+            maquinas = [
+                { id: 1, nome: "Máquina EVA 01", ultimaPreventiva: "2023-10-01", proximaPreventiva: "2023-12-01" },
+                { id: 2, nome: "Máquina EVA 02", ultimaPreventiva: "2023-09-15", proximaPreventiva: "2023-11-15" }
+            ];
+    
+            historico = [
+                { id: 1, data: "2023-11-01 08:30", usuario: "Admin", acao: "Cadastrou Túnel 01", detalhes: "Túnel cadastrado no sistema" },
+                { id: 2, data: "2023-11-01 09:15", usuario: "Admin", acao: "Cadastrou Máquina EVA 01", detalhes: "Máquina cadastrada no sistema" },
+                { id: 3, data: "2023-11-02 14:00", usuario: "Operador", acao: "Associou Túnel 02 à Máquina EVA 01", detalhes: "Associação realizada para produção" }
+            ];
+        }
+    
+        // Funções de navegação entre páginas
+        function mostrarPagina(idPagina) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(idPagina).classList.add('active');
+        }
+    
+        // Funções de login
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            const usuario = usuarios.find(u => u.username === username && u.password === password);
+            
+            if (usuario) {
+                usuarioLogado = usuario;
+                document.getElementById('userAvatar').textContent = usuario.avatar;
+                mostrarPagina('dashboardPage');
+                atualizarDashboard();
+                mostrarNotificacao('Login realizado com sucesso!', 'success');
+            } else {
+                mostrarNotificacao('Usuário ou senha incorretos!', 'error');
+            }
+        });
+    
+        document.getElementById('logout').addEventListener('click', function() {
+            usuarioLogado = null;
+            document.getElementById('loginForm').reset();
+            mostrarPagina('loginPage');
+        });
+    
+        // Funções de notificação
+        function mostrarNotificacao(mensagem, tipo) {
+            const notificacao = document.getElementById('notificacao');
+            const notificacaoTexto = document.getElementById('notificacaoTexto');
+            
+            notificacaoTexto.textContent = mensagem;
+            notificacao.style.display = 'flex';
+            
+            // Configura cores baseadas no tipo
+            if (tipo === 'success') {
+                notificacao.style.backgroundColor = 'var(--grendene-green)';
+                notificacao.style.color = 'white';
+            } else if (tipo === 'error') {
+                notificacao.style.backgroundColor = 'var(--grendene-red)';
+                notificacao.style.color = 'white';
+            } else {
+                notificacao.style.backgroundColor = 'var(--grendene-yellow)';
+                notificacao.style.color = 'black';
+            }
+            
+            // Fecha automaticamente após 5 segundos
+            setTimeout(fecharNotificacao, 5000);
+        }
+    
+        function fecharNotificacao() {
+            document.getElementById('notificacao').style.display = 'none';
+        }
+    
+        // Funções do dashboard
+        function atualizarDashboard() {
+            atualizarAlertas();
+            atualizarEstatisticas();
+            atualizarListas();
+        }
+    
+        function atualizarAlertas() {
+    const alertContainer = document.getElementById('alertContainer');
+    alertContainer.innerHTML = '';
+    
+    // Verifica túneis em manutenção
+    const tuneisManutencao = tuneis.filter(t => t.status === 'manutencao');
+    if (tuneisManutencao.length > 0) {
+        const alert = document.createElement('div');
+        alert.innerHTML = <i class="fas fa-exclamation-triangle"></i> <strong>Atenção:</strong> ${tuneisManutencao.length} túnel(s) em manutenção.;
+        alertContainer.appendChild(alert);
+    }
+    
+    // Verifica preventivas próximas
+    const hoje = new Date();
+    const preventivasProximas = maquinas.filter(m => {
+        const dataPreventiva = new Date(m.proximaPreventiva);
+        const diffTime = dataPreventiva - hoje;
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        return diffDays <= 10;
+    });
+    
+    if (preventivasProximas.length > 0) {
+        const alert = document.createElement('div');
+        alert.innerHTML = <i class="fas fa-calendar-exclamation"></i> <strong>Atenção:</strong> ${preventivasProximas.length} máquina(s) com preventiva próxima.;
+        alertContainer.appendChild(alert);
+    }
+    
+    if (tuneisManutencao.length === 0 && preventivasProximas.length === 0) {
+        alertContainer.innerHTML = '<i class="fas fa-check-circle"></i> Todos os sistemas operando normalmente.';
+        alertContainer.style.backgroundColor = '#d4edda';
+        alertContainer.style.borderLeft = '5px solid var(--grendene-green)';
+    }
+}
+            }
+            
+            if (tuneisManutencao.length === 0 && preventivasProximas.length === 0) {
+                alertContainer.innerHTML = '<i class="fas fa-check-circle"></i> Todos os sistemas operando normalmente.';
+                alertContainer.style.backgroundColor = '#d4edda';
+                alertContainer.style.borderLeft = '5px solid var(--grendene-green)';
+            }
+        }
+    
+        function atualizarEstatisticas() {
+            const statsContainer = document.getElementById('statsContainer');
+            statsContainer.innerHTML = '';
+            
+            // Estatísticas de túneis
+            const stats = [
+                { label: 'Túneis Totais', value: tuneis.length, icon: 'fa-snowflake' },
+                { label: 'Túneis Ativos', value: tuneis.filter(t => t.status === 'liberado').length, icon: 'fa-check-circle' },
+                { label: 'Em Manutenção', value: tuneis.filter(t => t.status === 'manutencao').length, icon: 'fa-wrench' },
+                { label: 'Em Preventiva', value: tuneis.filter(t => t.status === 'preventiva').length, icon: 'fa-calendar-check' },
+                { label: 'Máquinas EVA', value: maquinas.length, icon: 'fa-cogs' }
+            ];
+            
+            stats.forEach(stat => {
+                const statCard = document.createElement('div');
+                statCard.className = 'stat-card';
+                statCard.innerHTML = `
+                    <i class="fas ${stat.icon} icon"></i>
+                    <div class="stat-value">${stat.value}</div>
+                    <div class="stat-label">${stat.label}</div>
+                `;
+                statsContainer.appendChild(statCard);
+            });
+        }
+    
+        function atualizarListas() {
+            // Atualiza lista de túneis
+            const tuneisUl = document.getElementById('tuneisUl');
+            tuneisUl.innerHTML = '';
+            
+            tuneis.forEach(tunel => {
+                const item = document.createElement('div');
+                item.className = 'list-item';
+                
+                let statusClass = '';
+                let statusText = '';
+                
+                switch(tunel.status) {
+                    case 'liberado':
+                        statusClass = 'status-liberado';
+                        statusText = 'Liberado';
+                        break;
+                    case 'manutencao':
+                        statusClass = 'status-manutencao';
+                        statusText = 'Manutenção';
+                        break;
+                    case 'reserva':
+                        statusClass = 'status-reserva';
+                        statusText = 'Reserva';
+                        break;
+                    case 'preventiva':
+                        statusClass = 'status-preventiva';
+                        statusText = 'Preventiva';
+                        break;
+                }
+                
+                item.innerHTML = `
+                    <div>
+                        <strong>${tunel.nome}</strong>
+                        <span class="status-badge ${statusClass}">${statusText}</span>
+                        ${tunel.maquinaAssociada ? <div class="tunel-designado">Máquina: ${maquinas.find(m => m.id === tunel.maquinaAssociada)?.nome || 'N/A'}</div> : ''}
+                    </div>
+                    <div class="list-actions">
+                        <button class="btn-info" onclick="editarTunel(${tunel.id})"><i class="fas fa-edit"></i></button>
+                        <button class="btn-danger" onclick="excluirTunel(${tunel.id})"><i class="fas fa-trash"></i></button>
+                    </div>
+                `;
+                
+                tuneisUl.appendChild(item);
+            });
+            
+            // Atualiza lista de máquinas
+            const maquinasUl = document.getElementById('maquinasUl');
+            maquinasUl.innerHTML = '';
+            
+            maquinas.forEach(maquina => {
+                const item = document.createElement('div');
+                item.className = 'list-item';
+                
+                // Calcula dias para próxima preventiva
+                const hoje = new Date();
+                const dataPreventiva = new Date(maquina.proximaPreventiva);
+                const diffTime = dataPreventiva - hoje;
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                
+                let preventivaClass = '';
+                if (diffDays <= 0) {
+                    preventivaClass = 'preventiva-hoje';
+                } else if (diffDays <= 5) {
+                    preventivaClass = 'preventiva-5dias';
+                } else if (diffDays <= 10) {
+                    preventivaClass = 'preventiva-10dias';
+                } else if (diffDays <= 30) {
+                    preventivaClass = 'preventiva-30dias';
+                } else {
+                    preventivaClass = 'preventiva-ok';
+                }
+                
+                item.innerHTML = `
+                    <div>
+                        <strong>${maquina.nome}</strong>
+                        <div class="tunel-designado">Última preventiva: ${formatarData(maquina.ultimaPreventiva)}</div>
+                        <div>Próxima preventiva: 
+                            <span class="status-badge ${preventivaClass}">${formatarData(maquina.proximaPreventiva)} (${diffDays} dias)</span>
+                        </div>
+                    </div>
+                    <div class="list-actions">
+                        <button class="btn-info" onclick="editarMaquina(${maquina.id})"><i class="fas fa-edit"></i></button>
+                        <button class="btn-danger" onclick="excluirMaquina(${maquina.id})"><i class="fas fa-trash"></i></button>
+                    </div>
+                `;
+                
+                maquinasUl.appendChild(item);
+            });
+        }
+    
+        // Funções auxiliares
+        function formatarData(dataString) {
+            if (!dataString) return 'N/A';
+            const data = new Date(dataString);
+            return data.toLocaleDateString('pt-BR');
+        }
+    
+        // Event listeners para navegação
+        document.getElementById('btnCadastro').addEventListener('click', function() {
+            mostrarPagina('cadastroPage');
+        });
+    
+        document.getElementById('btnTuneis').addEventListener('click', function() {
+            document.getElementById('listsContainer').style.display = 'block';
+            document.getElementById('tuneisList').style.display = 'block';
+            document.getElementById('maquinasList').style.display = 'none';
+        });
+    
+        document.getElementById('btnMaquinas').addEventListener('click', function() {
+            document.getElementById('listsContainer').style.display = 'block';
+            document.getElementById('tuneisList').style.display = 'none';
+            document.getElementById('maquinasList').style.display = 'block';
+        });
+    
+        document.getElementById('voltarDashboard1').addEventListener('click', function() {
+            mostrarPagina('dashboardPage');
+        });
+    
+        document.getElementById('voltarDashboard2').addEventListener('click', function() {
+            mostrarPagina('dashboardPage');
+        });
+    
+        // Funções para cadastro de equipamentos
+        document.getElementById('btnCadastrarTunel').addEventListener('click', function() {
+            document.getElementById('cadastroForm').style.display = 'block';
+            document.getElementById('formTitle').textContent = 'Cadastrar Novo Túnel';
+            document.getElementById('tipoEquipamento').value = 'tunel';
+            document.getElementById('preventivaInicialContainer').style.display = 'none';
+            document.getElementById('preventivaMaquinaContainer').style.display = 'none';
+        });
+    
+        document.getElementById('btnCadastrarMaquina').addEventListener('click', function() {
+            document.getElementById('cadastroForm').style.display = 'block';
+            document.getElementById('formTitle').textContent = 'Cadastrar Nova Máquina EVA';
+            document.getElementById('tipoEquipamento').value = 'maquina';
+            document.getElementById('preventivaInicialContainer').style.display = 'none';
+            document.getElementById('preventivaMaquinaContainer').style.display = 'block';
+        });
+    
+        document.getElementById('equipamentoForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const tipo = document.getElementById('tipoEquipamento').value;
+            const nome = document.getElementById('nomeEquipamento').value;
+            
+            if (tipo === 'tunel') {
+                const novoId = tuneis.length > 0 ? Math.max(...tuneis.map(t => t.id)) + 1 : 1;
+                tuneis.push({
+                    id: novoId,
+                    nome: nome,
+                    status: 'liberado',
+                    maquinaAssociada: null,
+                    proximaPreventiva: null
+                });
+                
+                registrarHistorico(Cadastrou ${nome}, 'Túnel cadastrado no sistema');
+                mostrarNotificacao('Túnel cadastrado com sucesso!', 'success');
+            } else if (tipo === 'maquina') {
+                const dataPreventiva = document.getElementById('dataPreventivaMaquina').value;
+                const novoId = maquinas.length > 0 ? Math.max(...maquinas.map(m => m.id)) + 1 : 1;
+                
+                maquinas.push({
+                    id: novoId,
+                    nome: nome,
+                    ultimaPreventiva: new Date().toISOString().split('T')[0],
+                    proximaPreventiva: dataPreventiva
+                });
+                
+                registrarHistorico(Cadastrou ${nome}, 'Máquina EVA cadastrada no sistema');
+                mostrarNotificacao('Máquina EVA cadastrada com sucesso!', 'success');
+            }
+            
+            this.reset();
+            atualizarDashboard();
+        });
+    
+        // Funções para edição/exclusão
+        function editarTunel(id) {
+            const tunel = tuneis.find(t => t.id === id);
+            if (!tunel) return;
+            
+            mostrarPagina('cadastroPage');
+            document.getElementById('cadastroForm').style.display = 'block';
+            document.getElementById('formTitle').textContent = Editar ${tunel.nome};
+            document.getElementById('tipoEquipamento').value = 'tunel';
+            document.getElementById('nomeEquipamento').value = tunel.nome;
+            document.getElementById('preventivaInicialContainer').style.display = 'none';
+            document.getElementById('preventivaMaquinaContainer').style.display = 'none';
+        }
+    
+        function excluirTunel(id) {
+            if (confirm('Tem certeza que deseja excluir este túnel?')) {
+                tuneis = tuneis.filter(t => t.id !== id);
+                registrarHistorico('Excluiu túnel', Túnel ID ${id} removido do sistema);
+                mostrarNotificacao('Túnel excluído com sucesso!', 'success');
+                atualizarDashboard();
+            }
+        }
+    
+        function editarMaquina(id) {
+            const maquina = maquinas.find(m => m.id === id);
+            if (!maquina) return;
+            
+            mostrarPagina('cadastroPage');
+            document.getElementById('cadastroForm').style.display = 'block';
+            document.getElementById('formTitle').textContent = Editar ${maquina.nome};
+            document.getElementById('tipoEquipamento').value = 'maquina';
+            document.getElementById('nomeEquipamento').value = maquina.nome;
+            document.getElementById('dataPreventivaMaquina').value = maquina.proximaPreventiva;
+            document.getElementById('preventivaInicialContainer').style.display = 'none';
+            document.getElementById('preventivaMaquinaContainer').style.display = 'block';
+        }
+    
+        function excluirMaquina(id) {
+            if (confirm('Tem certeza que deseja excluir esta máquina?')) {
+                // Verifica se a máquina está associada a algum túnel
+                const tunelAssociado = tuneis.find(t => t.maquinaAssociada === id);
+                
+                if (tunelAssociado) {
+                    mostrarNotificacao('Não é possível excluir: máquina está associada a um túnel!', 'error');
+                    return;
+                }
+                
+                maquinas = maquinas.filter(m => m.id !== id);
+                registrarHistorico('Excluiu máquina', Máquina ID ${id} removida do sistema);
+                mostrarNotificacao('Máquina excluída com sucesso!', 'success');
+                atualizarDashboard();
+            }
+        }
+    
+        // Funções para histórico
+        function registrarHistorico(acao, detalhes) {
+            const novoId = historico.length > 0 ? Math.max(...historico.map(h => h.id)) + 1 : 1;
+            
+            historico.unshift({
+                id: novoId,
+                data: new Date().toISOString(),
+                usuario: usuarioLogado.nome,
+                acao: acao,
+                detalhes: detalhes
+            });
+        }
+    
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            inicializarDados();
+            
+            // Configura listeners para os botões de navegação
+            document.getElementById('btnServicos').addEventListener('click', function() {
+                mostrarPagina('servicosPage');
+            });
+            
+            document.getElementById('btnHistorico').addEventListener('click', function() {
+                // Implementar página de histórico se necessário
+                mostrarNotificacao('Funcionalidade de histórico em desenvolvimento', 'info');
+            });
+            
+            document.getElementById('btnMapeamento').addEventListener('click', function() {
+                // Implementar página de mapeamento se necessário
+                mostrarNotificacao('Funcionalidade de mapeamento em desenvolvimento', 'info');
+            });
+            
+            document.getElementById('primeiroAcesso').addEventListener('click', function() {
+                mostrarNotificacao('Entre em contato com o administrador para cadastro', 'info');
+            });
+        });
+    </script>
+    <script>
+        // Inicializa o armazenamento local se não existir
+        function initStorage() {
+            if (!localStorage.getItem('usuarios')) {
+                localStorage.setItem('usuarios', JSON.stringify([
+                    { username: 'admin', password: 'admin123', nome: 'Administrador' }
+                ]));
+            }
+            
+            if (!localStorage.getItem('tuneis')) {
+                localStorage.setItem('tuneis', JSON.stringify([]));
+            } else {
+                const tuneis = JSON.parse(localStorage.getItem('tuneis'));
+                const updated = tuneis.map(t => {
+                    if (!t.status) t.status = 'liberado';
+                    if (!t.maquinaDesignada) t.maquinaDesignada = null;
+                    if (!t.proximaPreventiva) t.proximaPreventiva = null;
+                    return t;
+                });
+                localStorage.setItem('tuneis', JSON.stringify(updated));
+            }
+            
+            if (!localStorage.getItem('maquinas')) {
+                localStorage.setItem('maquinas', JSON.stringify([]));
+            } else {
+                const maquinas = JSON.parse(localStorage.getItem('maquinas'));
+                const updated = maquinas.map(m => {
+                    if (!m.tuneisAssociados) m.tuneisAssociados = [];
+                    if (!m.ultimaPreventiva) m.ultimaPreventiva = null;
+                    if (!m.proximaPreventiva) m.proximaPreventiva = null;
+                    return m;
+                });
+                localStorage.setItem('maquinas', JSON.stringify(updated));
+            }
+            
+            if (!localStorage.getItem('servicos')) {
+                localStorage.setItem('servicos', JSON.stringify([]));
+            }
+            
+            if (!localStorage.getItem('historico')) {
+                localStorage.setItem('historico', JSON.stringify([]));
+            }
+            
+            limparHistoricoAntigo();
+            verificarPreventivas();
+        }
+        
+        function limparHistoricoAntigo() {
+            const historico = JSON.parse(localStorage.getItem('historico') || '[]');
+            const trintaDiasAtras = new Date();
+            trintaDiasAtras.setDate(trintaDiasAtras.getDate() - 30);
+            
+            const historicoAtualizado = historico.filter(item => {
+                return new Date(item.data) > trintaDiasAtras;
+            });
+            
+            localStorage.setItem('historico', JSON.stringify(historicoAtualizado));
+        }
+        
+        function verificarPreventivas() {
+            const tuneis = JSON.parse(localStorage.getItem('tuneis'));
+            const maquinas = JSON.parse(localStorage.getItem('maquinas'));
+            const hoje = new Date();
+            hoje.setHours(0, 0, 0, 0);
+            
+            // Verificar preventivas de túneis
+            tuneis.forEach(tunel => {
+                if (tunel.proximaPreventiva) {
+                    const dataPreventiva = new Date(tunel.proximaPreventiva);
+                    dataPreventiva.setHours(0, 0, 0, 0);
+                    
+                    if (dataPreventiva.getTime() === hoje.getTime()) {
+                        mostrarNotificacao(`O túnel ${tunel.nome} está na data de preventiva!`);
+                    }
+                }
+            });
+            
+            // Verificar preventivas de máquinas
+            maquinas.forEach(maquina => {
+                if (maquina.proximaPreventiva) {
+                    const dataPreventiva = new Date(maquina.proximaPreventiva);
+                    dataPreventiva.setHours(0, 0, 0, 0);
+                    
+                    if (dataPreventiva.getTime() === hoje.getTime()) {
+                        mostrarNotificacao(`A máquina ${maquina.nome} está na data de preventiva!`);
+                    }
+                }
+            });
+        }
+        
+        function mostrarNotificacao(mensagem) {
+            const notificacao = document.getElementById('notificacao');
+            const notificacaoTexto = document.getElementById('notificacaoTexto');
+            
+            notificacaoTexto.textContent = mensagem;
+            notificacao.style.display = 'flex';
+            
+            // Fecha automaticamente após 10 segundos
+            setTimeout(fecharNotificacao, 10000);
+        }
+        
+        function fecharNotificacao() {
+            document.getElementById('notificacao').style.display = 'none';
+        }
+        
+        // Navegação entre páginas
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(pageId).classList.add('active');
+        }
+        
+        // Login
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            const usuarios = JSON.parse(localStorage.getItem('usuarios'));
+            const usuario = usuarios.find(u => u.username === username && u.password === password);
+            
+            if (usuario) {
+                sessionStorage.setItem('usuarioAtual', JSON.stringify(usuario));
+                
+                // Atualizar avatar do usuário
+                const userAvatar = document.getElementById('userAvatar');
+                if (usuario.nome) {
+                    const iniciais = usuario.nome.split(' ').map(n => n[0]).join('').toUpperCase();
+                    userAvatar.textContent = iniciais.substring(0, 2);
+                } else {
+                    userAvatar.textContent = username.substring(0, 2).toUpperCase();
+                }
+                
+                loadDashboard();
+                showPage('dashboardPage');
+            } else {
+                alert('Usuário ou senha incorretos!');
+            }
+        });
+        
+        // Primeiro acesso
+        document.getElementById('primeiroAcesso').addEventListener('click', function() {
+            const username = prompt('Digite um nome de usuário:');
+            const password = prompt('Digite uma senha:');
+            const nome = prompt('Digite seu nome completo:');
+            
+            if (username && password) {
+                const usuarios = JSON.parse(localStorage.getItem('usuarios'));
+                usuarios.push({ username, password, nome });
+                localStorage.setItem('usuarios', JSON.stringify(usuarios));
+                alert('Cadastro realizado! Agora faça login.');
+            }
+        });
+        
+        // Logout
+        document.getElementById('logout').addEventListener('click', function() {
+            sessionStorage.removeItem('usuarioAtual');
+            showPage('loginPage');
+        });
+        
+        // Navegação do dashboard
+        document.getElementById('btnCadastro').addEventListener('click', function() {
+            showPage('cadastroPage');
+        });
+        
+        document.getElementById('btnServicos').addEventListener('click', function() {
+            loadServicosPage();
+            showPage('servicosPage');
+        });
+        
+        document.getElementById('btnTuneis').addEventListener('click', function() {
+            document.getElementById('listsContainer').style.display = 'block';
+            document.getElementById('maquinasList').style.display = 'none';
+            document.getElementById('tuneisList').style.display = 'block';
+            loadTuneisList();
+        });
+        
+        document.getElementById('btnMaquinas').addEventListener('click', function() {
+            document.getElementById('listsContainer').style.display = 'block';
+            document.getElementById('tuneisList').style.display = 'none';
+            document.getElementById('maquinasList').style.display = 'block';
+            loadMaquinasList();
+        });
+        
+        document.getElementById('btnTuneisReserva').addEventListener('click', function() {
+            loadTuneisReserva();
+            showPage('tuneisReservaPage');
+        });
+        
+        document.getElementById('btnTuneisManutencao').addEventListener('click', function() {
+            loadTuneisManutencao();
+            showPage('tuneisManutencaoPage');
+        });
+        
+        document.getElementById('btnTuneisPreventiva').addEventListener('click', function() {
+            loadTuneisPreventiva();
+            showPage('tuneisPreventivaPage');
+        });
+        
+        document.getElementById('btnHistorico').addEventListener('click', function() {
+            loadHistorico();
+            showPage('historicoPage');
+        });
+        
+        document.getElementById('btnMapeamento').addEventListener('click', function() {
+            loadMapeamento();
+            showPage('mapeamentoPage');
+        });
+        
+        // Voltar para o dashboard
+        document.getElementById('voltarDashboard1').addEventListener('click', function() {
+            loadDashboard();
+            showPage('dashboardPage');
+        });
+        
+        document.getElementById('voltarDashboard2').addEventListener('click', function() {
+            loadDashboard();
+            showPage('dashboardPage');
+        });
+        
+        document.getElementById('voltarDashboard3').addEventListener('click', function() {
+            loadDashboard();
+            showPage('dashboardPage');
+        });
+        
+        document.getElementById('voltarDashboard4').addEventListener('click', function() {
+            loadDashboard();
+            showPage('dashboardPage');
+        });
+        
+        document.getElementById('voltarDashboard5').addEventListener('click', function() {
+            loadDashboard();
+            showPage('dashboardPage');
+        });
+        
+        document.getElementById('voltarDashboard6').addEventListener('click', function() {
+            loadDashboard();
+            showPage('dashboardPage');
+        });
+        
+        document.getElementById('voltarDashboard7').addEventListener('click', function() {
+            loadDashboard();
+            showPage('dashboardPage');
+        });
+        
+        // Carregar dashboard
+        function loadDashboard() {
+            const tuneis = JSON.parse(localStorage.getItem('tuneis'));
+            const maquinas = JSON.parse(localStorage.getItem('maquinas'));
+            const alertContainer = document.getElementById('alertContainer');
+            const statsContainer = document.getElementById('statsContainer');
+            
+            // Atualizar estatísticas
+            const stats = {
+                totalTuneis: tuneis.length,
+                tuneisLiberados: tuneis.filter(t => t.status === 'liberado').length,
+                tuneisManutencao: tuneis.filter(t => t.status === 'manutencao').length,
+                tuneisPreventiva: tuneis.filter(t => t.status === 'preventiva').length,
+                totalMaquinas: maquinas.length,
+                maquinasAtivas: maquinas.filter(m => m.tuneisAssociados.length > 0).length
+            };
+            
+            statsContainer.innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-label">Total de Túneis</div>
+                    <div class="stat-value">${stats.totalTuneis}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Túneis Liberados</div>
+                    <div class="stat-value" style="color: var(--grendene-green);">${stats.tuneisLiberados}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Em Manutenção</div>
+                    <div class="stat-value" style="color: var(--grendene-red);">${stats.tuneisManutencao}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Em Preventiva</div>
+                    <div class="stat-value" style="color: #17a2b8;">${stats.tuneisPreventiva}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Total de Máquinas</div>
+                    <div class="stat-value">${stats.totalMaquinas}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Máquinas Ativas</div>
+                    <div class="stat-value" style="color: var(--grendene-green);">${stats.maquinasAtivas}</div>
+                </div>
+            `;
+            
+            // Verificar preventivas próximas
+            const hoje = new Date();
+            hoje.setHours(0, 0, 0, 0);
+            const umaSemana = new Date();
+            umaSemana.setDate(umaSemana.getDate() + 7);
+            umaSemana.setHours(0, 0, 0, 0);
+            
+            let alertHTML = '<h3><i class="fas fa-exclamation-triangle icon"></i>Atenção!</h3>';
+            let temAlerta = false;
+            
+            // Verifica preventivas de túneis
+            const preventivasProximasTuneis = tuneis.filter(t => {
+                if (!t.proximaPreventiva) return false;
+                const dataPreventiva = new Date(t.proximaPreventiva);
+                dataPreventiva.setHours(0, 0, 0, 0);
+                return dataPreventiva >= hoje && dataPreventiva <= umaSemana;
+            });
+            
+            if (preventivasProximasTuneis.length > 0) {
+                temAlerta = true;
+                alertHTML += '<p>Os seguintes túneis têm preventivas agendadas para os próximos 7 dias:</p><ul>';
+                
+                preventivasProximasTuneis.forEach(t => {
+                    const dataPreventiva = new Date(t.proximaPreventiva);
+                    alertHTML += `<li><strong>${t.nome}</strong> - ${dataPreventiva.toLocaleDateString()}</li>`;
+                });
+                
+                alertHTML += '</ul>';
+            }
+            
+            // Verifica preventivas de máquinas
+            const preventivasProximasMaquinas = maquinas.filter(m => {
+                if (!m.proximaPreventiva) return false;
+                const dataPreventiva = new Date(m.proximaPreventiva);
+                dataPreventiva.setHours(0, 0, 0, 0);
+                return dataPreventiva >= hoje && dataPreventiva <= umaSemana;
+            });
+            
+            if (preventivasProximasMaquinas.length > 0) {
+                temAlerta = true;
+                alertHTML += '<p>As seguintes máquinas têm preventivas agendadas para os próximos 7 dias:</p><ul>';
+                
+                preventivasProximasMaquinas.forEach(m => {
+                    const dataPreventiva = new Date(m.proximaPreventiva);
+                    alertHTML += `<li><strong>${m.nome}</strong> - ${dataPreventiva.toLocaleDateString()}</li>`;
+                });
+                
+                alertHTML += '</ul>';
+            }
+            
+            // Verifica preventivas atrasadas
+            const preventivasAtrasadasTuneis = tuneis.filter(t => {
+                if (!t.proximaPreventiva) return false;
+                const dataPreventiva = new Date(t.proximaPreventiva);
+                dataPreventiva.setHours(0, 0, 0, 0);
+                return dataPreventiva < hoje;
+            });
+            
+            if (preventivasAtrasadasTuneis.length > 0) {
+                temAlerta = true;
+                alertHTML += '<p>Os seguintes túneis têm preventivas atrasadas:</p><ul>';
+                
+                preventivasAtrasadasTuneis.forEach(t => {
+                    const dataPreventiva = new Date(t.proximaPreventiva);
+                    const diasAtraso = Math.floor((hoje - dataPreventiva) / (1000 * 60 * 60 * 24));
+                    alertHTML += `<li><strong>${t.nome}</strong> - ${dataPreventiva.toLocaleDateString()} (${diasAtraso} dias atrasado)</li>`;
+                });
+                
+                alertHTML += '</ul>';
+            }
+            
+            const preventivasAtrasadasMaquinas = maquinas.filter(m => {
+                if (!m.proximaPreventiva) return false;
+                const dataPreventiva = new Date(m.proximaPreventiva);
+                dataPreventiva.setHours(0, 0, 0, 0);
+                return dataPreventiva < hoje;
+            });
+            
+            if (preventivasAtrasadasMaquinas.length > 0) {
+                temAlerta = true;
+                alertHTML += '<p>As seguintes máquinas têm preventivas atrasadas:</p><ul>';
+                
+                preventivasAtrasadasMaquinas.forEach(m => {
+                    const dataPreventiva = new Date(m.proximaPreventiva);
+                    const diasAtraso = Math.floor((hoje - dataPreventiva) / (1000 * 60 * 60 * 24));
+                    alertHTML += `<li><strong>${m.nome}</strong> - ${dataPreventiva.toLocaleDateString()} (${diasAtraso} dias atrasado)</li>`;
+                });
+                
+                alertHTML += '</ul>';
+            }
+            
+            if (!temAlerta) {
+                alertHTML = '<p><i class="fas fa-check-circle icon" style="color: var(--grendene-green);"></i>Nenhum alerta no momento. Todos os sistemas operando normalmente.</p>';
+            }
+            
+            alertContainer.innerHTML = alertHTML;
+        }
+        
+        // Função para determinar a classe CSS baseada no status da preventiva
+        function getPreventivaClass(dataPreventiva) {
+            if (!dataPreventiva) return '';
+            
+            const hoje = new Date();
+            hoje.setHours(0, 0, 0, 0);
+            const dataPrev = new Date(dataPreventiva);
+            dataPrev.setHours(0, 0, 0, 0);
+            
+            const diffTime = hoje - dataPrev;
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            
+            if (diffDays === 0) return 'preventiva-hoje';
+            if (diffDays > 0 && diffDays <= 5) return 'preventiva-5dias';
+            if (diffDays > 5 && diffDays <= 10) return 'preventiva-10dias';
+            if (diffDays > 10) return 'preventiva-30dias';
+            return 'preventiva-ok';
+        }
+        
+        // Carregar lista de túneis
+        function loadTuneisList() {
+            const tuneis = JSON.parse(localStorage.getItem('tuneis'));
+            const maquinas = JSON.parse(localStorage.getItem('maquinas'));
+            const tuneisUl = document.getElementById('tuneisUl');
+            
+            tuneisUl.innerHTML = '';
+            
+            if (tuneis.length === 0) {
+                tuneisUl.innerHTML = '<p>Nenhum túnel cadastrado.</p>';
+                return;
+            }
+            
+            tuneis.forEach(tunel => {
+                const item = document.createElement('div');
+                item.className = 'list-item';
+                
+                let statusClass = '';
+                let statusText = '';
+                
+                switch(tunel.status) {
+                    case 'liberado':
+                        statusClass = 'status-liberado';
+                        statusText = 'LIBERADO';
+                        break;
+                    case 'reserva':
+                        statusClass = 'status-reserva';
+                        statusText = 'RESERVA';
+                        break;
+                    case 'manutencao':
+                        statusClass = 'status-manutencao';
+                        statusText = 'MANUTENÇÃO';
+                        break;
+                    case 'preventiva':
+                        statusClass = 'status-preventiva';
+                        statusText = 'PREVENTIVA';
+                        break;
+                }
+                
+                const maquinaDesignada = tunel.maquinaDesignada 
+                    ? maquinas.find(m => m.id == tunel.maquinaDesignada) 
+                    : null;
+                
+                // Determina a classe de cor para a preventiva
+                const preventivaClass = tunel.proximaPreventiva ? getPreventivaClass(tunel.proximaPreventiva) : '';
+                
+                item.innerHTML = `
+                    <div>
+                        <strong>${tunel.nome}</strong>
+                        <span class="status-badge ${statusClass}">${statusText}</span>
+                        ${maquinaDesignada ? `<div class="tunel-designado"><i class="fas fa-cogs icon"></i>Designado para: ${maquinaDesignada.nome}</div>` : ''}
+                        ${tunel.proximaPreventiva ? `
+                            <div class="status-badge ${preventivaClass}" style="margin-top: 5px;">
+                                <i class="fas fa-calendar-check icon"></i>Próxima preventiva: ${new Date(tunel.proximaPreventiva).toLocaleDateString()}
+                            </div>
+                        ` : ''}
+                    </div>
+                    <div class="list-actions">
+                        <button class="btn-secondary" onclick="editarTunel(${tunel.id})"><i class="fas fa-edit icon"></i>Editar</button>
+                        <button class="btn-danger" onclick="excluirTunel(${tunel.id})"><i class="fas fa-trash icon"></i>Excluir</button>
+                    </div>
+                `;
+                
+                tuneisUl.appendChild(item);
+            });
+        }
+        
+        // Carregar lista de máquinas
+        function loadMaquinasList() {
+            const maquinas = JSON.parse(localStorage.getItem('maquinas'));
+            const tuneis = JSON.parse(localStorage.getItem('tuneis'));
+            const maquinasUl = document.getElementById('maquinasUl');
+            
+            maquinasUl.innerHTML = '';
+            
+            if (maquinas.length === 0) {
+                maquinasUl.innerHTML = '<p>Nenhuma máquina cadastrada.</p>';
+                return;
+            }
+            
+            maquinas.forEach(maquina => {
+                const item = document.createElement('div');
+                item.className = 'list-item';
+                
+                const tuneisAssociados = maquina.tuneisAssociados.map(tunelId => {
+                    const tunel = tuneis.find(t => t.id == tunelId);
+                    return tunel ? tunel.nome : 'Desconhecido';
+                }).join(', ');
+                
+                // Determina a classe de cor para a preventiva
+                const preventivaClass = maquina.proximaPreventiva ? getPreventivaClass(maquina.proximaPreventiva) : '';
+                
+                item.innerHTML = `
+                    <div>
+                        <strong><i class="fas fa-cogs icon"></i>${maquina.nome}</strong>
+                        ${maquina.tuneisAssociados.length > 0 ? 
+                            `<div class="tunel-designado"><i class="fas fa-snowflake icon"></i>Túneis: ${tuneisAssociados}</div>` : 
+                            '<div class="tunel-designado"><i class="fas fa-info-circle icon"></i>Nenhum túnel associado</div>'}
+                        ${maquina.proximaPreventiva ? `
+                            <div class="status-badge ${preventivaClass}" style="margin-top: 5px;">
+                                <i class="fas fa-calendar-check icon"></i>Próxima preventiva: ${new Date(maquina.proximaPreventiva).toLocaleDateString()}
+                            </div>
+                        ` : ''}
+                    </div>
+                    <div class="list-actions">
+                        <button class="btn-secondary" onclick="editarMaquina(${maquina.id})"><i class="fas fa-edit icon"></i>Editar</button>
+                        <button class="btn-info" onclick="associarTuneis(${maquina.id})"><i class="fas fa-link icon"></i>Associar</button>
+                        <button class="btn-danger" onclick="excluirMaquina(${maquina.id})"><i class="fas fa-trash icon"></i>Excluir</button>
+                    </div>
+                `;
+                
+                maquinasUl.appendChild(item);
+            });
+        }
+        
+        // Carregar túneis em reserva
+        function loadTuneisReserva() {
+            const tuneis = JSON.parse(localStorage.getItem('tuneis'));
+            const maquinas = JSON.parse(localStorage.getItem('maquinas'));
+            const tuneisReservaUl = document.getElementById('tuneisReservaUl');
+            
+            tuneisReservaUl.innerHTML = '';
+            
+            // Túneis de reserva são os que não estão alocados, em manutenção ou preventiva
+            const tuneisReserva = tuneis.filter(t => 
+                t.status === 'liberado' && !t.maquinaDesignada
+            );
+            
+            if (tuneisReserva.length === 0) {
+                tuneisReservaUl.innerHTML = '<p><i class="fas fa-check-circle icon" style="color: var(--grendene-green);"></i>Nenhum túnel em reserva no momento.</p>';
+                return;
+            }
+            
+            tuneisReserva.forEach(tunel => {
+                const item = document.createElement('div');
+                item.className = 'list-item';
+                
+                item.innerHTML = `
+                    <div>
+                        <strong><i class="fas fa-snowflake icon"></i>${tunel.nome}</strong>
+                        <span class="status-badge status-liberado">RESERVA</span>
+                    </div>
+                    <div class="list-actions">
+                        <button class="btn-success" onclick="liberarTunel(${tunel.id})"><i class="fas fa-check icon"></i>Liberar</button>
+                    </div>
+                `;
+                
+                tuneisReservaUl.appendChild(item);
+            });
+        }
+        
+        // Carregar túneis em manutenção
+        function loadTuneisManutencao() {
+            const tuneis = JSON.parse(localStorage.getItem('tuneis'));
+            const maquinas = JSON.parse(localStorage.getItem('maquinas'));
+            const tuneisManutencaoUl = document.getElementById('tuneisManutencaoUl');
+            
+            tuneisManutencaoUl.innerHTML = '';
+            
+            const tuneisManutencao = tuneis.filter(t => t.status === 'manutencao');
+            
+            if (tuneisManutencao.length === 0) {
+                tuneisManutencaoUl.innerHTML = '<p><i class="fas fa-check-circle icon" style="color: var(--grendene-green);"></i>Nenhum túnel em manutenção no momento.</p>';
+                return;
+            }
+            
+            tuneisManutencao.forEach(tunel => {
+                const item = document.createElement('div');
+                item.className = 'list-item';
+                
+                const maquinaDesignada = tunel.maquinaDesignada 
+                    ? maquinas.find(m => m.id == tunel.maquinaDesignada) 
+                    : null;
+                
+                item.innerHTML = `
+                    <div>
+                        <strong><i class="fas fa-snowflake icon"></i>${tunel.nome}</strong>
+                        <span class="status-badge status-manutencao">MANUTENÇÃO</span>
+                        ${maquinaDesignada ? `<div class="tunel-designado"><i class="fas fa-cogs icon"></i>Designado para: ${maquinaDesignada.nome}</div>` : ''}
+                    </div>
+                    <div class="list-actions">
+                        <button class="btn-success" onclick="liberarTunel(${tunel.id})"><i class="fas fa-check icon"></i>Liberar</button>
+                    </div>
+                `;
+                
+                tuneisManutencaoUl.appendChild(item);
+            });
+        }
+        
+        // Carregar túneis em preventiva
+        function loadTuneisPreventiva() {
+            const tuneis = JSON.parse(localStorage.getItem('tuneis'));
+            const maquinas = JSON.parse(localStorage.getItem('maquinas'));
+            const tuneisPreventivaUl = document.getElementById('tuneisPreventivaUl');
+            
+            tuneisPreventivaUl.innerHTML = '';
+            
+            const tuneisPreventiva = tuneis.filter(t => t.status === 'preventiva');
+            
+            if (tuneisPreventiva.length === 0) {
+                tuneisPreventivaUl.innerHTML = '<p><i class="fas fa-check-circle icon" style="color: var(--grendene-green);"></i>Nenhum túnel em preventiva no momento.</p>';
+                return;
+            }
+            
+            tuneisPreventiva.forEach(tunel => {
+                const item = document.createElement('div');
+                item.className = 'list-item';
+                
+                const maquinaDesignada = tunel.maquinaDesignada 
+                    ? maquinas.find(m => m.id == tunel.maquinaDesignada) 
+                    : null;
+                
+                // Determina a classe de cor para a preventiva
+                const preventivaClass = tunel.proximaPreventiva ? getPreventivaClass(tunel.proximaPreventiva) : '';
+                
+                item.innerHTML = `
+                    <div>
+                        <strong><i class="fas fa-snowflake icon"></i>${tunel.nome}</strong>
+                        <span class="status-badge status-preventiva">PREVENTIVA</span>
+                        ${maquinaDesignada ? `<div class="tunel-designado"><i class="fas fa-cogs icon"></i>Designado para: ${maquinaDesignada.nome}</div>` : ''}
+                        ${tunel.proximaPreventiva ? `
+                            <div class="status-badge ${preventivaClass}" style="margin-top: 5px;">
+                                <i class="fas fa-calendar-check icon"></i>Próxima preventiva: ${new Date(tunel.proximaPreventiva).toLocaleDateString()}
+                            </div>
+                        ` : ''}
+                    </div>
+                    <div class="list-actions">
+                        <button class="btn-success" onclick="liberarTunel(${tunel.id})"><i class="fas fa-check icon"></i>Liberar</button>
+                    </div>
+                `;
+                
+                tuneisPreventivaUl.appendChild(item);
+            });
+        }
+        
+        // Carregar histórico
+        function loadHistorico() {
+            const historico = JSON.parse(localStorage.getItem('historico'));
+            const historicoList = document.getElementById('historicoList');
+            
+            historicoList.innerHTML = '';
+            
+            if (historico.length === 0) {
+                historicoList.innerHTML = '<p><i class="fas fa-info-circle icon"></i>Nenhum registro no histórico.</p>';
+                return;
+            }
+            
+            // Ordenar por data (mais recente primeiro)
+            const historicoOrdenado = [...historico].sort((a, b) => new Date(b.data) - new Date(a.data));
+            
+            historicoOrdenado.forEach(item => {
+                const historicoItem = document.createElement('div');
+                historicoItem.className = 'historico-item';
+                
+                historicoItem.innerHTML = `
+                    <div class="historico-data"><i class="far fa-clock icon"></i>${new Date(item.data).toLocaleString()}</div>
+                    <div class="historico-usuario"><i class="fas fa-user icon"></i>${item.usuario}</div>
+                    <div><strong><i class="fas fa-tasks icon"></i>${item.acao}</strong></div>
+                    <div><i class="fas fa-cogs icon"></i>Máquina: ${item.maquina}</div>
+                    <div><i class="fas fa-snowflake icon"></i>Túnel: ${item.tunel}</div>
+                    ${item.tunelSubstituto ? `<div><i class="fas fa-exchange-alt icon"></i>Túnel Substituto: ${item.tunelSubstituto}</div>` : ''}
+                    ${item.detalhes ? `<div class="historico-detalhes"><i class="fas fa-align-left icon"></i>${item.detalhes}</div>` : ''}
+                    ${item.proximaPreventiva ? `<div><i class="fas fa-calendar-check icon"></i>Próxima preventiva: ${new Date(item.proximaPreventiva).toLocaleDateString()}</div>` : ''}
+                `;
+                
+                historicoList.appendChild(historicoItem);
+            });
+        }
+        
+        // Filtrar histórico
+        function filtrarHistorico() {
+            const mesSelecionado = parseInt(document.getElementById('filtroMes').value);
+            const termoUsuario = document.getElementById('filtroUsuario').value.toLowerCase();
+            const historico = JSON.parse(localStorage.getItem('historico'));
+            const historicoList = document.getElementById('historicoList');
+            
+            let historicoFiltrado = [...historico];
+            
+            // Aplicar filtro por mês
+            if (mesSelecionado !== 0) {
+                historicoFiltrado = historicoFiltrado.filter(item => {
+                    const data = new Date(item.data);
+                    return (data.getMonth() + 1) === mesSelecionado;
+                });
+            }
+            
+            // Aplicar filtro por usuário
+            if (termoUsuario !== '') {
+                historicoFiltrado = historicoFiltrado.filter(item => {
+                    return item.usuario.toLowerCase().includes(termoUsuario);
+                });
+            }
+            
+            // Ordenar por data (mais recente primeiro)
+            historicoFiltrado.sort((a, b) => new Date(b.data) - new Date(a.data));
+            
+            historicoList.innerHTML = '';
+            
+            if (historicoFiltrado.length === 0) {
+                historicoList.innerHTML = '<p><i class="fas fa-search icon"></i>Nenhum registro encontrado com os filtros aplicados.</p>';
+                return;
+            }
+            
+            historicoFiltrado.forEach(item => {
+                const historicoItem = document.createElement('div');
+                historicoItem.className = 'historico-item';
+                
+                historicoItem.innerHTML = `
+                    <div class="historico-data"><i class="far fa-clock icon"></i>${new Date(item.data).toLocaleString()}</div>
+                    <div class="historico-usuario"><i class="fas fa-user icon"></i>${item.usuario}</div>
+                    <div><strong><i class="fas fa-tasks icon"></i>${item.acao}</strong></div>
+                    <div><i class="fas fa-cogs icon"></i>Máquina: ${item.maquina}</div>
+                    <div><i class="fas fa-snowflake icon"></i>Túnel: ${item.tunel}</div>
+                    ${item.tunelSubstituto ? `<div><i class="fas fa-exchange-alt icon"></i>Túnel Substituto: ${item.tunelSubstituto}</div>` : ''}
+                    ${item.detalhes ? `<div class="historico-detalhes"><i class="fas fa-align-left icon"></i>${item.detalhes}</div>` : ''}
+                    ${item.proximaPreventiva ? `<div><i class="fas fa-calendar-check icon"></i>Próxima preventiva: ${new Date(item.proximaPreventiva).toLocaleDateString()}</div>` : ''}
+                `;
+                
+                historicoList.appendChild(historicoItem);
+            });
+        }
+        
+        // Carregar mapeamento
+        function loadMapeamento() {
+            const maquinas = JSON.parse(localStorage.getItem('maquinas'));
+            const tuneis = JSON.parse(localStorage.getItem('tuneis'));
+            const mapaContainer = document.getElementById('mapaMaquinasTuneis');
+            
+            mapaContainer.innerHTML = '';
+            
+            if (maquinas.length === 0) {
+                mapaContainer.innerHTML = '<p><i class="fas fa-info-circle icon"></i>Nenhuma máquina cadastrada.</p>';
+                return;
+            }
+            
+            maquinas.forEach(maquina => {
+                const card = document.createElement('div');
+                card.className = 'maquina-card';
+                
+                // Túneis já associados a esta máquina
+                const tuneisAssociados = maquina.tuneisAssociados.map(tunelId => {
+                    const tunel = tuneis.find(t => t.id == tunelId);
+                    return tunel ? tunel : null;
+                }).filter(t => t !== null);
+                
+                // Túneis disponíveis para associação (liberados e não associados a esta máquina)
+                const tuneisDisponiveis = tuneis.filter(tunel => {
+                    return tunel.status === 'liberado' && !maquina.tuneisAssociados.includes(tunel.id);
+                });
+                
+                let tuneisAssociadosHTML = '';
+                if (tuneisAssociados.length > 0) {
+                    tuneisAssociadosHTML = '<div class="tuneis-associados">';
+                    tuneisAssociados.forEach(tunel => {
+                        tuneisAssociadosHTML += `
+                            <div class="tunel-associado">
+                                <i class="fas fa-snowflake icon"></i>${tunel.nome}
+                                <button class="btn-danger" style="padding: 2px 5px; font-size: 12px;" 
+                                    onclick="removerTunelAssociado(${maquina.id}, ${tunel.id})">
+                                    <i class="fas fa-times icon"></i>Remover
+                                </button>
+                            </div>
+                        `;
+                    });
+                    tuneisAssociadosHTML += '</div>';
+                } else {
+                    tuneisAssociadosHTML = '<p><i class="fas fa-info-circle icon"></i>Nenhum túnel associado</p>';
+                }
+                
+                let tuneisDisponiveisHTML = '';
+                if (tuneisDisponiveis.length > 0) {
+                    tuneisDisponiveisHTML = '<div class="tuneis-disponiveis"><p><i class="fas fa-plus-circle icon"></i>Adicionar túnel:</p>';
+                    tuneisDisponiveis.forEach(tunel => {
+                        tuneisDisponiveisHTML += `
+                            <button class="btn-success" style="padding: 5px 10px; font-size: 12px; margin-right: 5px; margin-bottom: 5px;" 
+                                onclick="adicionarTunelAssociado(${maquina.id}, ${tunel.id})">
+                                <i class="fas fa-snowflake icon"></i>${tunel.nome}
+                            </button>
+                        `;
+                    });
+                    tuneisDisponiveisHTML += '</div>';
+                } else {
+                    tuneisDisponiveisHTML = '<div class="tuneis-disponiveis"><p><i class="fas fa-info-circle icon"></i>Nenhum túnel disponível para associação</p></div>';
+                }
+                
+                // Determina a classe de cor para a preventiva
+                const preventivaClass = maquina.proximaPreventiva ? getPreventivaClass(maquina.proximaPreventiva) : '';
+                
+                card.innerHTML = `
+                    <h3><i class="fas fa-cogs icon"></i>${maquina.nome}</h3>
+                    <div class="maquina-info">
+                        <h4><i class="fas fa-snowflake icon"></i>Túneis Associados (${tuneisAssociados.length}/2)</h4>
+                        ${tuneisAssociadosHTML}
+                        ${tuneisDisponiveisHTML}
+                        ${maquina.proximaPreventiva ? `
+                            <div class="status-badge ${preventivaClass}" style="margin-top: 10px;">
+                                <i class="fas fa-calendar-check icon"></i>Próxima preventiva: ${new Date(maquina.proximaPreventiva).toLocaleDateString()}
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+                
+                mapaContainer.appendChild(card);
+            });
+        }
+        
+        // Funções auxiliares
+        function editarTunel(id) {
+            const tuneis = JSON.parse(localStorage.getItem('tuneis'));
+            const tunel = tuneis.find(t => t.id == id);
+            
+            const novoNome = prompt('Editar nome do túnel:', tunel.nome);
+            if (novoNome && novoNome !== tunel.nome) {
+                tunel.nome = novoNome;
+                localStorage.setItem('tuneis', JSON.stringify(tuneis));
+                loadTuneisList();
+                loadMaquinasList();
+                loadMapeamento();
+            }
+        }
+        
+        function excluirTunel(id) {
+            if (confirm('Tem certeza que deseja excluir este túnel?')) {
+                // Remover de todas as máquinas que possuem este túnel associado
+                const maquinas = JSON.parse(localStorage.getItem('maquinas'));
+                const updatedMaquinas = maquinas.map(maquina => {
+                    maquina.tuneisAssociados = maquina.tuneisAssociados.filter(tunelId => tunelId != id);
+                    return maquina;
+                });
+                localStorage.setItem('maquinas', JSON.stringify(updatedMaquinas));
+                
+                // Remover o túnel
+                const tuneis = JSON.parse(localStorage.getItem('tuneis'));
+                const updatedTuneis = tuneis.filter(t => t.id != id);
+                localStorage.setItem('tuneis', JSON.stringify(updatedTuneis));
+                
+                loadTuneisList();
+                loadMaquinasList();
+                loadMapeamento();
+            }
+        }
+        
+        function editarMaquina(id) {
+            const maquinas = JSON.parse(localStorage.getItem('maquinas'));
+            const maquina = maquinas.find(m => m.id == id);
+            
+            const novoNome = prompt('Editar nome da máquina:', maquina.nome);
+            if (novoNome && novoNome !== maquina.nome) {
+                maquina.nome = novoNome;
+                localStorage.setItem('maquinas', JSON.stringify(maquinas));
+                loadMaquinasList();
+                loadMapeamento();
+            }
+        }
+        
+        function excluirMaquina(id) {
+            if (confirm('Tem certeza que deseja excluir esta máquina?')) {
+                // Liberar os túneis associados a esta máquina
+                const maquinas = JSON.parse(localStorage.getItem('maquinas'));
+                const maquina = maquinas.find(m => m.id == id);
+                
+                const tuneis = JSON.parse(localStorage.getItem('tuneis'));
+                const updatedTuneis = tuneis.map(tunel => {
+                    if (maquina.tuneisAssociados.includes(tunel.id)) {
+                        tunel.status = 'liberado';
+                        tunel.maquinaDesignada = null;
+                    }
+                    return tunel;
+                });
+                localStorage.setItem('tuneis', JSON.stringify(updatedTuneis));
+                
+                // Remover a máquina
+                const updatedMaquinas = maquinas.filter(m => m.id != id);
+                localStorage.setItem('maquinas', JSON.stringify(updatedMaquinas));
+                
+                loadMaquinasList();
+                loadTuneisList();
+                loadMapeamento();
+            }
+        }
+        
+        function liberarTunel(id) {
+            const tuneis = JSON.parse(localStorage.getItem('tuneis'));
+            const maquinas = JSON.parse(localStorage.getItem('maquinas'));
+            const usuario = JSON.parse(sessionStorage.getItem('usuarioAtual'));
+            
+            const updatedTuneis = tuneis.map(t => {
+                if (t.id == id) {
+                    t.status = 'liberado';
+                    t.maquinaDesignada = null;
+                }
+                return t;
+            });
+            
+            // Remover o túnel de qualquer máquina que o tenha associado
+            const updatedMaquinas = maquinas.map(maquina => {
+                maquina.tuneisAssociados = maquina.tuneisAssociados.filter(tunelId => tunelId != id);
+                return maquina;
+            });
+            
+            localStorage.setItem('tuneis', JSON.stringify(updatedTuneis));
+            localStorage.setItem('maquinas', JSON.stringify(updatedMaquinas));
+            
+            // Registrar no histórico
+            const historico = JSON.parse(localStorage.getItem('historico'));
+            const now = new Date();
+            const tunel = tuneis.find(t => t.id == id);
+            
+            historico.push({
+                data: now.toISOString(),
+                usuario: usuario.username,
+                maquina: '',
+                tunel: tunel.nome,
+                acao: `Túnel ${tunel.nome} liberado`,
+                detalhes: 'Túnel liberado para uso'
+            });
+            
+            localStorage.setItem('historico', JSON.stringify(historico));
+            
+            mostrarNotificacao(`Túnel ${tunel.nome} liberado com sucesso!`);
+            
+            // Recarregar a página apropriada
+            const currentPage = document.querySelector('.page.active').id;
+            
+            if (currentPage === 'tuneisReservaPage') {
+                loadTuneisReserva();
+            } else if (currentPage === 'tuneisManutencaoPage') {
+                loadTuneisManutencao();
+            } else if (currentPage === 'tuneisPreventivaPage') {
+                loadTuneisPreventiva();
+            } else if (currentPage === 'mapeamentoPage') {
+                loadMapeamento();
+            } else {
+                loadDashboard();
+                showPage('dashboardPage');
+            }
+        }
+        
+        function associarTuneis(maquinaId) {
+            showPage('mapeamentoPage');
+            loadMapeamento();
+        }
+        
+        function adicionarTunelAssociado(maquinaId, tunelId) {
+            const maquinas = JSON.parse(localStorage.getItem('maquinas'));
+            const maquina = maquinas.find(m => m.id == maquinaId);
+            
+            if (maquina.tuneisAssociados.length >= 2) {
+                mostrarNotificacao('Cada máquina pode ter no máximo 2 túneis associados!');
+                return;
+            }
+            
+            if (!maquina.tuneisAssociados.includes(tunelId)) {
+                maquina.tuneisAssociados.push(tunelId);
+                localStorage.setItem('maquinas', JSON.stringify(maquinas));
+                
+                // Atualizar o túnel
+                const tuneis = JSON.parse(localStorage.getItem('tuneis'));
+                const updatedTuneis = tuneis.map(tunel => {
+                    if (tunel.id == tunelId) {
+                        tunel.status = 'reserva';
+                        tunel.maquinaDesignada = maquinaId;
+                    }
+                    return tunel;
+                });
+                localStorage.setItem('tuneis', JSON.stringify(updatedTuneis));
+                
+                // Registrar no histórico
+                const usuario = JSON.parse(sessionStorage.getItem('usuarioAtual'));
+                const historico = JSON.parse(localStorage.getItem('historico'));
+                const now = new Date();
+                const tunel = tuneis.find(t => t.id == tunelId);
+                
+                historico.push({
+                    data: now.toISOString(),
+                    usuario: usuario.username,
+                    maquina: maquina.nome,
+                    tunel: tunel.nome,
+                    acao: `Túnel ${tunel.nome} associado à máquina ${maquina.nome}`,
+                    detalhes: 'Associação realizada no mapeamento'
+                });
+                
+                localStorage.setItem('historico', JSON.stringify(historico));
+                
+                mostrarNotificacao(`Túnel ${tunel.nome} associado com sucesso à máquina ${maquina.nome}`);
+                
+                loadMapeamento();
+                loadMaquinasList();
+                loadTuneisList();
+            }
+        }
+        
+        function removerTunelAssociado(maquinaId, tunelId) {
+            const maquinas = JSON.parse(localStorage.getItem('maquinas'));
+            const maquina = maquinas.find(m => m.id == maquinaId);
+            
+            maquina.tuneisAssociados = maquina.tuneisAssociados.filter(id => id != tunelId);
+            localStorage.setItem('maquinas', JSON.stringify(maquinas));
+            
+            // Liberar o túnel
+            const tuneis = JSON.parse(localStorage.getItem('tuneis'));
+            const updatedTuneis = tuneis.map(tunel => {
+                if (tunel.id == tunelId) {
+                    tunel.status = 'liberado';
+                    tunel.maquinaDesignada = null;
+                }
+                return tunel;
+            });
+            localStorage.setItem('tuneis', JSON.stringify(updatedTuneis));
+            
+            // Registrar no histórico
+            const usuario = JSON.parse(sessionStorage.getItem('usuarioAtual'));
+            const historico = JSON.parse(localStorage.getItem('historico'));
+            const now = new Date();
+            const tunel = tuneis.find(t => t.id == tunelId);
+            
+            historico.push({
+                data: now.toISOString(),
+                usuario: usuario.username,
+                maquina: maquina.nome,
+                tunel: tunel.nome,
+                acao: `Túnel ${tunel.nome} desassociado da máquina ${maquina.nome}`,
+                detalhes: 'Desassociação realizada no mapeamento'
+            });
+            
+            localStorage.setItem('historico', JSON.stringify(historico));
+            
+            mostrarNotificacao(`Túnel ${tunel.nome} desassociado com sucesso da máquina ${maquina.nome}`);
+            
+            loadMapeamento();
+            loadMaquinasList();
+            loadTuneisList();
+        }
+        
+        // Cadastro de equipamentos
+        document.getElementById('btnCadastrarTunel').addEventListener('click', function() {
+            document.getElementById('cadastroForm').style.display = 'block';
+            document.getElementById('formTitle').textContent = 'Cadastrar Novo Túnel';
+            document.getElementById('tipoEquipamento').value = 'tunel';
+            document.getElementById('preventivaInicialContainer').style.display = 'block';
+            document.getElementById('preventivaMaquinaContainer').style.display = 'none';
+        });
+        
+        document.getElementById('btnCadastrarMaquina').addEventListener('click', function() {
+            document.getElementById('cadastroForm').style.display = 'block';
+            document.getElementById('formTitle').textContent = 'Cadastrar Nova Máquina EVA';
+            document.getElementById('tipoEquipamento').value = 'maquina';
+            document.getElementById('preventivaInicialContainer').style.display = 'none';
+            document.getElementById('preventivaMaquinaContainer').style.display = 'block';
+        });
+        
+        document.getElementById('equipamentoForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const tipo = document.getElementById('tipoEquipamento').value;
+            const nome = document.getElementById('nomeEquipamento').value;
+            
+            if (tipo === 'tunel') {
+                const dataPreventivaInicial = document.getElementById('dataPreventivaInicial').value;
+                const tuneis = JSON.parse(localStorage.getItem('tuneis'));
+                
+                // Se não foi informada data inicial, usa a data atual
+                const dataBase = dataPreventivaInicial || new Date().toISOString().split('T')[0];
+                const novoPreventiva = dataBase; // A primeira preventiva é na data informada
+                
+                tuneis.push({
+                    id: Date.now(),
+                    nome: nome,
+                    status: 'liberado',
+                    maquinaDesignada: null,
+                    proximaPreventiva: novoPreventiva
+                });
+                localStorage.setItem('tuneis', JSON.stringify(tuneis));
+                mostrarNotificacao('Túnel cadastrado com sucesso!');
+            } else {
+                const dataPreventiva = document.getElementById('dataPreventivaMaquina').value;
+                const maquinas = JSON.parse(localStorage.getItem('maquinas'));
+                
+                // Calcula a próxima preventiva (1 mês após a data informada)
+                let proximaPreventiva = null;
+                if (dataPreventiva) {
+                    const data = new Date(dataPreventiva);
+                    data.setMonth(data.getMonth() + 1);
+                    proximaPreventiva = data.toISOString().split('T')[0];
+                }
+                
+                maquinas.push({
+                    id: Date.now(),
+                    nome: nome,
+                    tuneisAssociados: [],
+                    ultimaPreventiva: dataPreventiva,
+                    proximaPreventiva: proximaPreventiva
+                });
+                localStorage.setItem('maquinas', JSON.stringify(maquinas));
+                mostrarNotificacao('Máquina EVA cadastrada com sucesso!');
+            }
+            
+            this.reset();
+            document.getElementById('cadastroForm').style.display = 'none';
+            loadDashboard();
+        });
+        
+        // Serviços
+        function loadServicosPage() {
+            const maquinas = JSON.parse(localStorage.getItem('maquinas'));
+            
+            const maquinaSelect = document.getElementById('servicoMaquina');
+            maquinaSelect.innerHTML = '<option value="">Selecione a máquina...</option>';
+            maquinas.forEach(maquina => {
+                const option = document.createElement('option');
+                option.value = maquina.id;
+                option.textContent = maquina.nome;
+                maquinaSelect.appendChild(option);
+            });
+            
+            // Limpa os outros campos
+            document.getElementById('servicoTunel').innerHTML = '<option value="">Selecione o túnel...</option>';
+            document.getElementById('acao').value = '';
+            document.getElementById('detalhes').value = '';
+            document.getElementById('detalhesContainer').style.display = 'none';
+            document.getElementById('proximaPreventivaContainer').style.display = 'none';
+            document.getElementById('tunelSubstitutoContainer').style.display = 'none';
+        }
+        
+        function carregarTuneisDaMaquina() {
+            const maquinaId = document.getElementById('servicoMaquina').value;
+            const maquinas = JSON.parse(localStorage.getItem('maquinas'));
+            const tuneis = JSON.parse(localStorage.getItem('tuneis'));
+            
+            const maquina = maquinas.find(m => m.id == maquinaId);
+            const tunelSelect = document.getElementById('servicoTunel');
+            
+            tunelSelect.innerHTML = '<option value="">Selecione o túnel...</option>';
+            
+            if (maquina) {
+                // Mostra apenas os túneis associados a esta máquina
+                maquina.tuneisAssociados.forEach(tunelId => {
+                    const tunel = tuneis.find(t => t.id == tunelId);
+                    if (tunel) {
+                        const option = document.createElement('option');
+                        option.value = tunel.id;
+                        option.textContent = tunel.nome;
+                        tunelSelect.appendChild(option);
+                    }
+                });
+            }
+            
+            // Atualiza os campos conforme a seleção
+            atualizarCamposServico();
+        }
+        
+        function atualizarCamposServico() {
+            const acao = document.getElementById('acao').value;
+            const detalhesContainer = document.getElementById('detalhesContainer');
+            const preventivaContainer = document.getElementById('proximaPreventivaContainer');
+            const substitutoContainer = document.getElementById('tunelSubstitutoContainer');
+            
+            detalhesContainer.style.display = 'block';
+            
+            if (acao === 'preventiva') {
+                preventivaContainer.style.display = 'block';
+                substitutoContainer.style.display = 'none';
+                
+                // Preenche automaticamente a próxima preventiva (1 mês após hoje)
+                const hoje = new Date();
+                const proximoMes = new Date(hoje);
+                proximoMes.setMonth(proximoMes.getMonth() + 1);
+                document.getElementById('dataProximaPreventiva').value = proximoMes.toISOString().split('T')[0];
+            } else if (acao === 'manutencao' || acao === 'reserva') {
+                preventivaContainer.style.display = 'none';
+                substitutoContainer.style.display = 'block';
+                
+                // Carrega os túneis disponíveis para reserva
+                const tuneis = JSON.parse(localStorage.getItem('tuneis'));
+                const substitutoSelect = document.getElementById('tunelSubstituto');
+                
+                substitutoSelect.innerHTML = '<option value="">Selecione o túnel substituto...</option>';
+                
+                tuneis.forEach(tunel => {
+                    // Túneis de reserva são os que não estão alocados, em manutenção ou preventiva
+                    if (tunel.status === 'liberado' && !tunel.maquinaDesignada) {
+                        const option = document.createElement('option');
+                        option.value = tunel.id;
+                        option.textContent = tunel.nome;
+                        substitutoSelect.appendChild(option);
+                    }
+                });
+            } else if (acao === 'transferencia') {
+                preventivaContainer.style.display = 'none';
+                substitutoContainer.style.display = 'block';
+                
+                // Carrega todos os túneis disponíveis para transferência
+                const tuneis = JSON.parse(localStorage.getItem('tuneis'));
+                const substitutoSelect = document.getElementById('tunelSubstituto');
+                
+                substitutoSelect.innerHTML = '<option value="">Selecione o túnel substituto...</option>';
+                
+                tuneis.forEach(tunel => {
+                    // Para transferência, pode selecionar qualquer túnel liberado
+                    if (tunel.status === 'liberado') {
+                        const option = document.createElement('option');
+                        option.value = tunel.id;
+                        option.textContent = tunel.nome;
+                        substitutoSelect.appendChild(option);
+                    }
+                });
+            } else {
+                preventivaContainer.style.display = 'none';
+                substitutoContainer.style.display = 'none';
+            }
+        }
+        
+        document.getElementById('servicoForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const maquinaId = document.getElementById('servicoMaquina').value;
+            const tunelId = document.getElementById('servicoTunel').value;
+            const acao = document.getElementById('acao').value;
+            const detalhes = document.getElementById('detalhes').value;
+            const dataProximaPreventiva = document.getElementById('dataProximaPreventiva').value;
+            const tunelSubstitutoId = document.getElementById('tunelSubstituto').value;
+            
+            const maquinas = JSON.parse(localStorage.getItem('maquinas'));
+            const tuneis = JSON.parse(localStorage.getItem('tuneis'));
+            const usuario = JSON.parse(sessionStorage.getItem('usuarioAtual'));
+            
+            const maquina = maquinas.find(m => m.id == maquinaId);
+            const tunel = tuneis.find(t => t.id == tunelId);
+            const tunelSubstituto = tunelSubstitutoId ? tuneis.find(t => t.id == tunelSubstitutoId) : null;
+            
+            // Validar se precisa de substituto
+            if ((acao === 'manutencao' || acao === 'reserva') && !tunelSubstitutoId) {
+                mostrarNotificacao('Para esta ação é necessário selecionar um túnel substituto!');
+                return;
+            }
+            
+            // Atualizar status do túnel e máquina
+            const updatedTuneis = tuneis.map(t => {
+                if (t.id == tunelId) {
+                    if (acao === 'preventiva') {
+                        t.status = acao;
+                        t.proximaPreventiva = dataProximaPreventiva;
+                    } else if (acao === 'transferencia' && tunelSubstitutoId) {
+                        // Libera o túnel atual e associa o substituto
+                        t.status = 'liberado';
+                        t.maquinaDesignada = null;
+                    } else if (acao === 'manutencao' || acao === 'reserva') {
+                        t.status = acao;
+                    }
+                }
+                
+                // Atualiza o túnel substituto se necessário
+                if ((acao === 'manutencao' || acao === 'reserva' || acao === 'transferencia') && t.id == tunelSubstitutoId) {
+                    t.status = 'reserva';
+                    t.maquinaDesignada = maquinaId;
+                }
+                
+                return t;
+            });
+            
+            // Atualizar máquinas com túneis associados
+            const updatedMaquinas = maquinas.map(m => {
+                if (m.id == maquinaId) {
+                    // Atualiza preventiva se for o caso
+                    if (acao === 'preventiva') {
+                        m.ultimaPreventiva = new Date().toISOString().split('T')[0];
+                        m.proximaPreventiva = dataProximaPreventiva;
+                    }
+                    
+                    // Adicionar substituto se necessário
+                    if ((acao === 'manutencao' || acao === 'reserva' || acao === 'transferencia') && tunelSubstitutoId) {
+                        // Remove o túnel atual se estiver na lista
+                        m.tuneisAssociados = m.tuneisAssociados.filter(id => id != tunelId);
+                        
+                        // Adiciona o substituto
+                        if (!m.tuneisAssociados.includes(parseInt(tunelSubstitutoId))) {
+                            m.tuneisAssociados.push(parseInt(tunelSubstitutoId));
+                        }
+                    }
+                }
+                return m;
+            });
+            
+            localStorage.setItem('tuneis', JSON.stringify(updatedTuneis));
+            localStorage.setItem('maquinas', JSON.stringify(updatedMaquinas));
+            
+            // Registrar no histórico
+            const historico = JSON.parse(localStorage.getItem('historico'));
+            const now = new Date();
+            
+            let acaoDescricao = '';
+            switch(acao) {
+                case 'preventiva':
+                    acaoDescricao = `Preventiva realizada no túnel ${tunel.nome}`;
+                    break;
+                case 'manutencao':
+                    acaoDescricao = `Manutenção realizada no túnel ${tunel.nome}. Substituto: ${tunelSubstituto.nome}`;
+                    break;
+                case 'reserva':
+                    acaoDescricao = `Túnel ${tunel.nome} colocado em reserva. Substituto: ${tunelSubstituto.nome}`;
+                    break;
+                case 'transferencia':
+                    acaoDescricao = `Transferência de máquina do túnel ${tunel.nome} para ${tunelSubstituto.nome}`;
+                    break;
+            }
+            
+            historico.push({
+                data: now.toISOString(),
+                usuario: usuario.username,
+                maquina: maquina.nome,
+                tunel: tunel.nome,
+                acao: acaoDescricao,
+                detalhes: detalhes,
+                proximaPreventiva: acao === 'preventiva' ? dataProximaPreventiva : null,
+                tunelSubstituto: (acao === 'manutencao' || acao === 'reserva' || acao === 'transferencia') ? tunelSubstituto.nome : null
+            });
+            
+            localStorage.setItem('historico', JSON.stringify(historico));
+            
+            mostrarNotificacao('Serviço registrado com sucesso!');
+            this.reset();
+            document.getElementById('detalhesContainer').style.display = 'none';
+            document.getElementById('proximaPreventivaContainer').style.display = 'none';
+            document.getElementById('tunelSubstitutoContainer').style.display = 'none';
+            
+            loadDashboard();
+            showPage('dashboardPage');
+        });
+        
+        // Inicializar o sistema
+        window.onload = function() {
+            initStorage();
+            
+            // Verificar se o usuário já está logado
+            if (sessionStorage.getItem('usuarioAtual')) {
+                const usuario = JSON.parse(sessionStorage.getItem('usuarioAtual'));
+                const userAvatar = document.getElementById('userAvatar');
+                
+                if (usuario.nome) {
+                    const iniciais = usuario.nome.split(' ').map(n => n[0]).join('').toUpperCase();
+                    userAvatar.textContent = iniciais.substring(0, 2);
+                } else {
+                    userAvatar.textContent = usuario.username.substring(0, 2).toUpperCase();
+                }
+                
+                loadDashboard();
+                showPage('dashboardPage');
+            } else {
+                showPage('loginPage');
+            }
+        };
+    </script>
+</body>
+</html>
